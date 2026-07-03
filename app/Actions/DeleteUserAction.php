@@ -11,6 +11,6 @@ class DeleteUserAction
      */
     public function execute(User $user): void
     {
-        return $user->delete();
+        $user->delete();
     }
 }

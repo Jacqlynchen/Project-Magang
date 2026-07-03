@@ -13,6 +13,34 @@
 
     <h2 class="mb-4">Master Data User</h2>
 
+    @if(Auth::check())
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+                Login sebagai:
+                <strong>{{ Auth::user()->name }}</strong>
+
+                @can('is-admin')
+                    <span class="badge bg-success ms-2">
+                        Admin
+                    </span>
+                @else
+                    <span class="badge bg-secondary ms-2">
+                        User
+                    </span>
+                @endcan
+            </div>
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button class="btn btn-danger btn-sm">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+    @endif
+
     @yield('content')
 
 </div>

@@ -42,8 +42,8 @@ class UserService
     /**
      * Menghapus user.
      */
-    public function delete(User $user): bool
+    public function delete(User $user): void
     {
-        return $this->deleteUserAction->execute($user);
+        $this->deleteUserAction->execute($user);
     }
 }

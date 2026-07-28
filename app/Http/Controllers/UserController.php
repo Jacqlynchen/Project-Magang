@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\HasTransaction;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
@@ -9,79 +10,55 @@ use App\Services\UserService;
 
 class UserController extends Controller
 {
-    public function __construct(
-        protected UserService $userService
-    ) {}
+    use HasTransaction;
 
-    /**
-     * Menampilkan semua data user.
-     */
     public function index()
     {
-        $users = $this->userService->getAll();
-
-        return view('users.index', compact('users'));
+        return view('users.index');
     }
 
-    /**
-     * Menampilkan form tambah user.
-     */
-    public function create()
-    {
+    public function store(
+        StoreUserRequest $request,
+        UserService $service
+    ) {
         $this->authorize('create', User::class);
 
-        return view('users.create');
+        return $this->handle(
+            fn() => $service->store($request->validated()),
+            action: 'store'
+        );
     }
 
-    /**
-     * Menyimpan data user baru.
-     */
-    public function store(StoreUserRequest $request)
+    public function show(User $user)
     {
-        $this->authorize('create', User::class);
-
-        $this->userService->store($request->validated());
-
-        return redirect()
-            ->route('users.index')
-            ->with('success', 'Data user berhasil ditambahkan.');
+        return response()->json([
+            'success' => true,
+            'data' => $user->load('role')
+        ]);
     }
 
-    /**
-     * Menampilkan form edit user.
-     */
-    public function edit(User $user)
-    {
+    public function update(
+        UpdateUserRequest $request,
+        User $user,
+        UserService $service
+    ) {
         $this->authorize('update', $user);
 
-        return view('users.edit', compact('user'));
+        return $this->handle(
+            fn() => $service->update($user, $request->validated()),
+            action: 'update'
+        );
     }
 
-    /**
-     * Mengupdate data user.
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        $this->authorize('update', $user);
-
-        $this->userService->update($user, $request->validated());
-
-        return redirect()
-            ->route('users.index')
-            ->with('success', 'Data user berhasil diperbarui.');
-    }
-
-    /**
-     * Menghapus data user.
-     */
-    public function destroy(User $user)
-    {
+    public function destroy(
+        User $user,
+        UserService $service
+    ) {
         $this->authorize('delete', $user);
-        
-        $this->userService->delete($user);
 
-        return redirect()
-            ->route('users.index')
-            ->with('success', 'Data user berhasil dihapus.');
+        return $this->handle(
+            fn() => $service->delete($user),
+            action: 'destroy'
+        );
     }
 }

@@ -6,18 +6,18 @@ use App\Models\User;
 
 class UserPolicy
 {
-    public function create(User $user): bool
+    public function create(User $authUser): bool
     {
-        return $user->role === 'admin';
+        return optional($authUser->role)->name === 'admin';
     }
 
-    public function update(User $user): bool
+    public function update(User $authUser, User $user): bool
     {
-        return $user->role === 'admin';
+        return optional($authUser->role)->name === 'admin';
     }
 
-    public function delete(User $user): bool
+    public function delete(User $authUser, User $user): bool
     {
-        return $user->role === 'admin';
+        return optional($authUser->role)->name === 'admin';
     }
 }

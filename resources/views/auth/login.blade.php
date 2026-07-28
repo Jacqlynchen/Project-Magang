@@ -10,11 +10,17 @@
     </div>
 @endif
 
-@if ($errors->any())
+@if(session('error'))
     <div class="alert alert-danger">
-        Email atau password salah.
+        {{ session('error') }}
     </div>
 @endif
+
+@error('email')
+    <div class="alert alert-danger">
+        {{ $message }}
+    </div>
+@enderror
 
 <form action="{{ route('login.process') }}" method="POST">
     @csrf

@@ -30,6 +30,7 @@ class UpdateUserRequest extends FormRequest
             ],
 
             'password' => 'nullable|min:6',
+            'role_id' => 'required|exists:roles,id',
         ];
     }
 
@@ -39,9 +40,7 @@ class UpdateUserRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Nama',
-            'email' => 'Email',
-            'password' => 'Password',
+            'role_id' => 'Role',
         ];
     }
 

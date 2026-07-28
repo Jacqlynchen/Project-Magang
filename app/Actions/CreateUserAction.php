@@ -13,9 +13,10 @@ class CreateUserAction
     public function execute(array $data): User
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
             'password' => Hash::make($data['password']),
+            'role_id'  => $data['role_id'],
         ]);
     }
 }

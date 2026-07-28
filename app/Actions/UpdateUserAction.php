@@ -14,6 +14,7 @@ class UpdateUserAction
     {
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->role_id = $data['role_id'];
 
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);

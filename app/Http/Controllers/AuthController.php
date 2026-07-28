@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLogin()
-    {
-        return view('auth.login');
-    }
-
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -19,16 +15,24 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-            return redirect()->route('users.index')
-                ->with('success', 'Login berhasil.');
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('users.index');
+    }
+
+    public function showLogin()
+    {
+        return view('auth.login');
     }
 
     public function logout(Request $request)

@@ -2,83 +2,127 @@
 
 @section('content')
 
-{{-- Tombol Tambah User hanya untuk Admin --}}
-@can('create', App\Models\User::class)
-    <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">
-        Tambah User
-    </a>
-@endcan
+<div class="d-flex justify-content-between align-items-center mb-3">
+    
+    <h3>Data User</h3>
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+    @can('create', App\Models\User::class)
+        <button
+            id="btnCreate" class="btn btn-primary">
+            Tambah User
+        </button>
+    @endcan
 
-<table class="table table-bordered">
+</div>
 
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th width="200">Aksi</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-    @forelse($users as $user)
-
-        <tr>
-            <td>{{ $user->id }}</td>
-            <td>{{ $user->name }}</td>
-            <td>{{ $user->email }}</td>
-
-            <td>
-
-                {{-- Tombol Edit hanya untuk Admin --}}
-                @can('update', $user)
-                    <a href="{{ route('users.edit', $user) }}"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
-                @endcan
-
-                {{-- Tombol Hapus hanya untuk Admin --}}
-                @can('delete', $user)
-                    <form action="{{ route('users.destroy', $user) }}"
-                          method="POST"
-                          style="display:inline">
-
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Yakin ingin menghapus user ini?')">
-                            Hapus
-                        </button>
-
-                    </form>
-                @endcan
-
-            </td>
-
-        </tr>
-
-    @empty
-
-        <tr>
-            <td colspan="4" class="text-center">
-                Tidak ada data.
-            </td>
-        </tr>
-
-    @endforelse
-
-    </tbody>
-
+<table
+    id="users-table"
+    class="table table-bordered table-striped"
+    style="width:100%">
 </table>
 
+<div class="modal fade" id="userModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form id="userForm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">
+                        Tambah User
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="userId" name="userId">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Role</label>
+
+                        <select
+                            id="role_id"
+                            name="role_id"
+                            class="form-select">
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-success">
+                        Simpan
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
+
+@push('scripts')
+
+<link rel="stylesheet"
+href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+window.routes = {
+    datatable: "{{ route('datatables', ['table' => 'users']) }}",
+    index: "{{ route('users.index') }}",
+    store: "{{ route('users.store') }}"
+};
+</script>
+
+<script src="{{ asset('js/users.js') }}"></script>
+
+@endpush

@@ -6,25 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Menambahkan kolom role ke tabel users.
-     */
+
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('password');
+
+            $table->foreignId('role_id')
+                ->nullable()
+                ->after('password')
+                ->constrained('roles')
+                ->nullOnDelete();
+
         });
     }
 
-    /**
-     * Menghapus kolom role jika migration di-rollback.
-     */
+
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'role')) {
-                $table->dropColumn('role');
-            }
+
+            $table->dropConstrainedForeignId('role_id');
+
         });
     }
+
 };

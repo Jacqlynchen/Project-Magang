@@ -3,45 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Master Data User</title>
+    <title>
+        @yield('title', 'Avian Brands')
+    </title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
+
 <body>
 
-<div class="container mt-5">
+<div class="app-layout">
 
-    <h2 class="mb-4">Master Data</h2>
+    {{-- SIDEBAR --}}
+    <aside class="sidebar">
 
-    @if(Auth::check())
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                Login sebagai:
-                <strong>{{ Auth::user()->name }}</strong>
+        {{-- LOGO --}}
+        <div class="sidebar-logo">
+            <img
+                src="{{ asset('images/avian-logo.png') }}"
+                alt="Avian Brands"
+            >
+        </div>
 
-                @if(Auth::user()->role?->name === 'admin')
-                    <span class="badge bg-success ms-2">Admin</span>
-                @else
-                    <span class="badge bg-secondary ms-2">User</span>
-                @endif
+
+        {{-- MENU --}}
+        <nav class="sidebar-menu">
+
+            {{-- DASHBOARD --}}
+            <div class="menu-section-title">
+                DASHBOARD
             </div>
 
-            <form action="{{ route('logout') }}" method="POST">
+            <a
+                href="{{ route('dashboard') }}"
+                class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            {{-- MASTER DATA --}}
+            <div class="menu-section-title">
+                MASTER DATA
+            </div>
+
+            <a
+                href="{{ route('branches.index') }}"
+                class="menu-item {{ request()->routeIs('branches.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">▣</span>
+                <span>Branches</span>
+            </a>
+
+            <a
+                href="{{ route('net-sites.index') }}"
+                class="menu-item {{ request()->routeIs('net-sites.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">▤</span>
+                <span>Net Sites</span>
+            </a>
+
+            <a
+                href="{{ route('vendors.index') }}"
+                class="menu-item {{ request()->routeIs('vendors.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">◇</span>
+                <span>Vendors</span>
+            </a>
+
+        </nav>
+
+
+        {{-- ADMIN --}}
+        <div class="sidebar-bottom">
+
+            <div class="admin-profile">
+
+                <div class="admin-avatar">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                </div>
+
+                <div class="admin-info">
+
+                    <strong>
+                        {{ auth()->user()->name ?? 'Admin' }}
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            {{-- LOGOUT --}}
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+                class="logout-form"
+            >
                 @csrf
-                <button class="btn btn-danger btn-sm">
+
+                <button
+                    type="submit"
+                    class="logout-button"
+                >
                     Logout
                 </button>
             </form>
-        </div>
-    @endif
 
-    @yield('content')
+        </div>
+
+    </aside>
+
+
+    {{-- MAIN CONTENT --}}
+    <main class="main-content">
+
+        {{-- TOPBAR --}}
+        <header class="topbar">
+
+            <div>
+                <h2>
+                    @yield('title', 'Dashboard')
+                </h2>
+            </div>
+
+            <div class="topbar-user">
+                {{ auth()->user()->name ?? 'Admin' }}
+            </div>
+
+        </header>
+
+
+        {{-- CONTENT --}}
+        <div class="page-content">
+
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @yield('content')
+
+        </div>
+
+    </main>
 
 </div>
-
-@stack('scripts')
 
 </body>
 </html>

@@ -1,50 +1,122 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
+<head>
 
-<h3>Login</h3>
+    <meta charset="UTF-8">
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login - Avian Brands</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/app.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        {{-- LOGO --}}
+        <div class="login-logo">
+
+            <img
+                src="{{ asset('images/avian-logo.png') }}"
+                alt="Avian Brands"
+            >
+
+        </div>
+
+
+        {{-- TITLE --}}
+        <h1 class="login-title">
+            Selamat datang!
+        </h1>
+
+        <p class="login-description">
+            Silahkan isi email dan password di bawah ini untuk login.
+        </p>
+
+
+        {{-- FORM --}}
+        <form
+            method="POST"
+            action="{{ route('login') }}"
+        >
+
+            @csrf
+
+
+            {{-- EMAIL --}}
+            <div class="login-form-group">
+
+                <label for="email">
+                    E-mail <span class="login-required">*</span>
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    class="login-input"
+                    placeholder="Masukan email.."
+                    required
+                    autofocus
+                >
+
+                @error('email')
+                    <div class="login-error">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+
+            {{-- PASSWORD --}}
+            <div class="login-form-group">
+
+                <label for="password">
+                    Password <span class="login-required">*</span>
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="login-input"
+                    placeholder="............"
+                    required
+                >
+
+                @error('password')
+                    <div class="login-error">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+            </div>
+
+            {{-- LOGIN --}}
+            <button type="submit" class="login-button">
+                Login
+            </button>
+
+        </form>
+
     </div>
-@endif
 
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+</div>
 
-@error('email')
-    <div class="alert alert-danger">
-        {{ $message }}
-    </div>
-@enderror
+</body>
 
-<form action="{{ route('login.process') }}" method="POST">
-    @csrf
-
-    <div class="mb-3">
-        <label>Email</label>
-        <input 
-            type="email" 
-            name="email" 
-            class="form-control" 
-            value="{{ old('email') }}">
-    </div>
-
-    <div class="mb-3">
-        <label>Password</label>
-        <input 
-            type="password" 
-            name="password" 
-            class="form-control">
-    </div>
-
-    <button class="btn btn-primary">
-        Login
-    </button>
-</form>
-
-@endsection
+</html>

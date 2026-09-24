@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Status extends Model
+{
+    protected $fillable = [
+        'code',
+        'name',
+        'collection',
+        'statusable',
+    ];
+
+    public function logs()
+    {
+        return $this->hasMany(StatusLog::class);
+    }
+}

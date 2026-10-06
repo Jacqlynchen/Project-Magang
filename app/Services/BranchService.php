@@ -31,7 +31,7 @@ class BranchService
                 $query->where('area', $request->area);
             })
             ->latest()
-            ->paginate(5)
+            ->paginate(10)
             ->withQueryString();
     }
 

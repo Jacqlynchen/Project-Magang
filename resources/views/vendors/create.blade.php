@@ -21,7 +21,7 @@
             href="{{ route('vendors.index') }}"
             class="btn btn-secondary"
         >
-            ← Back to Vendors
+            ← Back
         </a>
 
     </div>

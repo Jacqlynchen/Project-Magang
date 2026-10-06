@@ -73,6 +73,36 @@
                 <span>Vendors</span>
             </a>
 
+            <a
+                href="{{ route('employees.index') }}"
+                class="menu-item {{ request()->routeIs('employees.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">◈</span>
+                <span>Employees</span>
+            </a>
+
+
+            {{-- OPERATIONS --}}
+            <div class="menu-section-title">
+                OPERATIONS
+            </div>
+
+            <a
+                href="{{ route('site-issues.index') }}"
+                class="menu-item {{ request()->routeIs('site-issues.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">⚠</span>
+                <span>Site Issues</span>
+            </a>
+
+            <a
+                href="{{ route('net-issues.index') }}"
+                class="menu-item {{ request()->routeIs('net-issues.*') ? 'active' : '' }}"
+            >
+                <span class="menu-icon">☰</span>
+                <span>Issue Types</span>
+            </a>
+
         </nav>
 
 

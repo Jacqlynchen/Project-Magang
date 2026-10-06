@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\NetSiteController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\NetIssueController;
+use App\Http\Controllers\SiteIssueController;
+use App\Http\Controllers\EmployeeController;
 use App\Models\Branch;
 
 Route::get('/', function () {
@@ -121,5 +124,58 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/vendors/{vendor}', [VendorController::class, 'destroy'])
         ->name('vendors.destroy');
+
+
+    // =========================================================
+// NET ISSUES (master issue type catalog)
+// =========================================================
+
+Route::get('/net-issues', [NetIssueController::class, 'index'])
+    ->name('net-issues.index');
+
+Route::get('/net-issues/create', [NetIssueController::class, 'create'])
+    ->name('net-issues.create');
+
+Route::post('/net-issues', [NetIssueController::class, 'store'])
+    ->name('net-issues.store');
+
+Route::get('/net-issues/{netIssue}/edit', [NetIssueController::class, 'edit'])
+    ->name('net-issues.edit');
+
+Route::put('/net-issues/{netIssue}', [NetIssueController::class, 'update'])
+    ->name('net-issues.update');
+
+Route::delete('/net-issues/{netIssue}', [NetIssueController::class, 'destroy'])
+    ->name('net-issues.destroy');
+
+// =========================================================
+// SITE ISSUES (actual issue reports)
+// =========================================================
+
+Route::get('/site-issues', [SiteIssueController::class, 'index'])
+    ->name('site-issues.index');
+
+Route::get('/site-issues/create', [SiteIssueController::class, 'create'])
+    ->name('site-issues.create');
+
+Route::post('/site-issues', [SiteIssueController::class, 'store'])
+    ->name('site-issues.store');
+
+Route::get('/site-issues/{siteIssue}/edit', [SiteIssueController::class, 'edit'])
+    ->name('site-issues.edit');
+
+Route::put('/site-issues/{siteIssue}', [SiteIssueController::class, 'update'])
+    ->name('site-issues.update');
+
+Route::delete('/site-issues/{siteIssue}', [SiteIssueController::class, 'destroy'])
+    ->name('site-issues.destroy');
+
+
+// =========================================================
+// EMPLOYEES (read-only — data comes from EmployeeSeeder)
+// =========================================================
+
+Route::get('/employees', [EmployeeController::class, 'index'])
+    ->name('employees.index');
 
 });

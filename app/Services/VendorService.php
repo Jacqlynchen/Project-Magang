@@ -20,7 +20,7 @@ class VendorService
                 });
             })
             ->latest()
-            ->paginate(5)
+            ->paginate(10)
             ->withQueryString();
     }
 

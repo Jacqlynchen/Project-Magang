@@ -21,7 +21,7 @@
             href="{{ route('net-sites.index') }}"
             class="btn btn-secondary"
         >
-            ← Back to Net Sites
+            ← Back
         </a>
 
     </div>

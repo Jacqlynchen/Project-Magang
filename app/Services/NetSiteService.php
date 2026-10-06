@@ -22,7 +22,7 @@ class NetSiteService
             'currentStatusLog.status',
         ])
             ->latest()
-            ->paginate(5);
+            ->paginate(10);
     }
 
     /**
